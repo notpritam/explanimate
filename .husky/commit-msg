@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+# ABOUTME: Enforces Conventional Commits via commitlint so history stays machine-parseable.
+# ABOUTME: Rejects commits whose message or scope violates commitlint.config.mjs.
+pnpm exec commitlint --edit "$1"

@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+# ABOUTME: Pre-push gate — the "no broken skill leaves the machine" wall.
+# ABOUTME: Runs the full validate pipeline (format check + ABOUTME headers across the tree).
+echo "→ pre-push: running full validation…"
+pnpm run validate || {
+  echo "✗ validation failed — push blocked. Fix the errors above."
+  exit 1
+}
+echo "✓ pre-push checks passed."

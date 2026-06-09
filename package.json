@@ -1,0 +1,27 @@
+{
+  "name": "explanimate",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Agent skill that builds animated, React-based visual explainers — SVG + Tailwind diagram scenes with Motion, rendered to video with Remotion.",
+  "author": "frontend@emergent.sh",
+  "license": "UNLICENSED",
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=22",
+    "pnpm": ">=9"
+  },
+  "scripts": {
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,mjs,json,md,css,yaml,yml}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mjs,json,md,css,yaml,yml}\"",
+    "check:headers": "node tooling/scripts/check-headers.mjs",
+    "validate": "pnpm run format:check && pnpm run check:headers",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.6.1",
+    "@commitlint/config-conventional": "^19.6.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.3.0",
+    "prettier": "^3.4.2"
+  }
+}

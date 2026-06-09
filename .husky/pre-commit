@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+# ABOUTME: Pre-commit gate. Runs lint-staged on staged files only: ABOUTME header check
+# ABOUTME: and Prettier formatting. Blocks the commit on any failure.
+echo "→ pre-commit: validating staged files (headers, prettier)…"
+pnpm exec lint-staged
