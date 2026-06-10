@@ -38,10 +38,18 @@ function buildPath(pts: Pt[], curve: "auto" | "ortho" | "line"): { d: string; en
   const to = pts[pts.length - 1];
 
   if (curve === "ortho" && pts.length === 2) {
-    const midX = (from.x + to.x) / 2;
+    // Elbow along the dominant axis: H-V-H when mostly horizontal, V-H-V when mostly vertical.
+    if (Math.abs(to.x - from.x) >= Math.abs(to.y - from.y)) {
+      const midX = (from.x + to.x) / 2;
+      return {
+        d: `M ${from.x} ${from.y} L ${midX} ${from.y} L ${midX} ${to.y} L ${to.x} ${to.y}`,
+        endDir: { x: to.x - midX, y: 0 },
+      };
+    }
+    const midY = (from.y + to.y) / 2;
     return {
-      d: `M ${from.x} ${from.y} L ${midX} ${from.y} L ${midX} ${to.y} L ${to.x} ${to.y}`,
-      endDir: { x: to.x - midX, y: 0 },
+      d: `M ${from.x} ${from.y} L ${from.x} ${midY} L ${to.x} ${midY} L ${to.x} ${to.y}`,
+      endDir: { x: 0, y: to.y - midY },
     };
   }
 

@@ -59,6 +59,9 @@ try {
   mkdirSync(opts.out, { recursive: true });
 
   for (const id of ids) {
+    // Hash-only navigation does not reload the page, so the PREVIOUS scene's ready-marker would
+    // still be in the DOM and the wait below would pass against a stale scene. Blank first.
+    await page.goto("about:blank");
     await page.goto(`${baseUrl}/#/scene/${id}?shot=1`, { waitUntil: "networkidle" });
     const ready = page.locator('[data-scene-ready="true"]');
     try {
