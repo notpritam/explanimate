@@ -32,12 +32,12 @@ explanimate/
     motion-recipes.md       ←   Motion (Framer) recipes: stagger, draw-in, attention choreography
     remotion-video.md       ←   video compositions: sequences, springs, render pipeline
   templates/studio/         ← the scaffold copied by scripts/init.mjs (full Vite app)
-    src/shared/primitives/  ←   Stage, Node, Edge, Label, Timeline… (animation-agnostic)
+    src/shared/primitives/  ←   Stage, Node, Edge, Label, Dot, Reveal (animation-agnostic)
     src/scenes/             ←   agent-authored interactive scenes
     src/remotion/           ←   Remotion root + compositions (video targets)
+    scripts/shoot.mjs       ←   Playwright screenshots → PNG (ships WITH each studio, so studios are self-sufficient)
   scripts/
     init.mjs                ← scaffold a studio into a target directory
-    shoot.mjs               ← Playwright screenshot(s) of scenes → PNG for the verify loop
   tooling/scripts/
     check-headers.mjs       ← ABOUTME header enforcement (pre-commit)
   docs/
