@@ -1,0 +1,36 @@
+{
+  "name": "explanimate-studio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "explanimate studio — animated React visual explainers: scenes (Motion) and videos (Remotion).",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "shoot": "node scripts/shoot.mjs",
+    "video:studio": "remotion studio",
+    "video:still": "remotion still",
+    "video:render": "remotion render"
+  },
+  "dependencies": {
+    "@remotion/player": "^4.0.220",
+    "motion": "^12.0.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "remotion": "^4.0.220"
+  },
+  "devDependencies": {
+    "@remotion/cli": "^4.0.220",
+    "@remotion/tailwind-v4": "^4.0.220",
+    "@tailwindcss/vite": "^4.1.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "playwright": "^1.55.0",
+    "tailwindcss": "^4.1.0",
+    "typescript": "^5.8.0",
+    "vite": "^7.1.0"
+  }
+}
