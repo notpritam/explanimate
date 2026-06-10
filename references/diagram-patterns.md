@@ -133,3 +133,14 @@ Types: JSON/payloads · code snippets · event-name sequences · mini UI mockups
 Default to free-floating `Label`s. Box an element only when: it is a focal point, edges connect to
 it, the shape carries meaning (decision), or it groups elements. Target <30% of text boxed.
 Typography (level + color) is the hierarchy tool, not rectangles.
+
+## Worked examples (read the real scenes)
+
+The studio ships two registered scenes — open them when you want a full file, not a snippet:
+
+- `src/scenes/how-explanimate-works/Scene.tsx` — assembly line + a feedback **cycle** (the accent
+  loop edge via a waypoint) + evidence cards + a mini UI mockup built from nested divs.
+- `src/scenes/jwt-refresh-flow/Scene.tsx` — a **comparison** built from freeform bars (short
+  access-token lives over one long refresh bar) as the hero argument, a **multi-zoom** dashed `Edge`
+  from the "expiring now" cell down into one real exchange, then an assembly line + an evidence card
+  with the actual `/oauth/token` response. Good template for "contrast two things, then zoom into one."
