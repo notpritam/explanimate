@@ -1,6 +1,6 @@
 # explanimate — Project Rules
 
-Agent skill that builds animated, React-based visual explainers: SVG + Tailwind diagram scenes
+Agent skill that builds animated, React-based visual explainers: hybrid HTML/SVG diagram scenes
 animated with Motion, rendered to deterministic video with Remotion. v2 rewrite of
 `excalidraw-diagram-skill` — scenes are **code**, not serialized canvas JSON.
 

@@ -1,66 +1,127 @@
-<!-- ABOUTME: Human-facing README — what explanimate is, how to install it as a skill, and how it works. -->
-<!-- ABOUTME: The agent-facing entrypoint is SKILL.md; this file is for the person installing the skill. -->
+<!-- ABOUTME: Human-facing README for explanimate, including purpose, capabilities, and quick install paths. -->
+<!-- ABOUTME: The agent-facing operating manual is SKILL.md; detailed installation lives in INSTALL.md. -->
 
 # explanimate
 
-**Explain by animating.** An agent skill that builds animated, React-based visual explainers —
-diagram scenes and motion-graphics videos — as real code. The successor to
-`excalidraw-diagram-skill`: instead of hand-crafting serialized canvas JSON, the agent writes
-React components (SVG + Tailwind), animates them with [Motion](https://motion.dev), verifies them
-visually through a screenshot loop, and renders deterministic MP4s with
-[Remotion](https://remotion.dev).
+**Explain by animating.** `explanimate` is an agent skill for building animated visual explainers as
+real code: React scenes, SVG diagram primitives, HTML controls, Tailwind styling, Motion animation,
+and Remotion video output.
+
+It replaces canvas/JSON-style diagram generation with a maintainable studio workflow. The agent
+creates a Vite + React studio inside your project, builds scenes from reusable primitives, verifies
+screenshots with Playwright, and can render deterministic MP4 videos when requested.
 
 ![The reference scene, captured by the skill's own verify loop](docs/example-shot.png)
 
-## What the agent gets
+## What It Gives An Agent
 
-- **A studio per project** — a Vite + React 19 + TS + Tailwind v4 app scaffolded from
-  `templates/studio/`, with a gallery of every scene and video it builds.
-- **A primitive vocabulary** — `Stage`, `Node`, `Edge`, `Label`, `Dot`, `Reveal` — semantic,
-  animation-agnostic components: Motion drives them in interactive scenes, Remotion's frame clock
-  drives them in videos (`appear`/`draw` progress props).
-- **A verify loop** — `pnpm shoot <scene-id>` screenshots scenes headlessly; the agent Reads the
-  PNG and fixes what it sees. Nothing ships unseen.
-- **Video in the browser and to file** — every composition plays instantly in the gallery via
-  `@remotion/player`, and `pnpm video:render <id>` produces the MP4.
-- **A methodology** — argue-don't-display, the Isomorphism/Education/Motion tests, the pattern
-  library, evidence artifacts. See `SKILL.md` and `references/`.
+- **A project-local studio**: one `explanimate-studio/` per project, with a gallery for scenes and
+  videos.
+- **Hybrid HTML/SVG diagrams**: HTML for controls, panels, editable state, and annotation UI; SVG
+  primitives for geometry, connectors, arrows, and flow.
+- **Reusable primitives**: `Stage`, `Node`, `Edge`, `Label`, `Dot`, and `Reveal`.
+- **Motion-first scenes**: interactive explainers use Motion with meaningful order, emphasis, and
+  draw-in animation.
+- **Remotion videos**: frame-deterministic compositions can render stills or MP4s.
+- **Built-in feedback overlay**: Replay, Feedback, Comment, Highlight, edit/remove, and Send to
+  agent payloads are mounted in generated studios.
+- **Verification gates**: `pnpm shoot <scene-id>` for screenshots and `pnpm check:scene-ui
+<scene-id>` for interaction/layout checks.
 
-## Install as a skill
+## Quick Install
+
+Clone the skill somewhere stable:
 
 ```bash
-# Claude Code — user scope (all projects):
-cp -R explanimate ~/.claude/skills/explanimate
-
-# Claude Code — project scope:
-cp -R explanimate <project>/.claude/skills/explanimate
-
-# Or symlink to keep it updatable in place:
-ln -s /Users/notpritamm/Documents/skills/explanimate ~/.claude/skills/explanimate
+mkdir -p ~/agent-skills
+git clone https://github.com/notpritam/explanimate.git ~/agent-skills/explanimate
 ```
 
-Any agent runtime that reads `SKILL.md`-style skills (Codex, custom harnesses) can consume the same
-folder — the skill is self-contained: docs + template + scripts, no network access required beyond
-`pnpm install`.
+Install it for Claude Code:
+
+```bash
+mkdir -p ~/.claude/skills
+ln -sfn ~/agent-skills/explanimate ~/.claude/skills/explanimate
+```
+
+Install it for Codex:
+
+```bash
+mkdir -p ~/.codex/skills
+ln -sfn ~/agent-skills/explanimate ~/.codex/skills/explanimate
+```
+
+Then restart the agent session so it reloads available skills.
+
+For copy installs, project-local installs, Windows PowerShell, verification, updates, and a
+paste-ready agent prompt, see [INSTALL.md](INSTALL.md).
+
+## Use It In A Project
+
+Ask an agent:
+
+```text
+Use the explanimate skill to create an animated visual explainer for how our auth refresh flow works.
+Start a local studio if needed, verify the screenshot, and give me the scene URL.
+```
+
+The skill tells the agent to scaffold a studio when one does not exist:
+
+```bash
+node ~/.codex/skills/explanimate/scripts/init.mjs explanimate-studio
+cd explanimate-studio
+pnpm install
+pnpm exec playwright install chromium
+pnpm dev
+```
+
+The generated studio includes example scenes, scene registry, shared primitives, Remotion setup, and
+the feedback/replay overlay.
 
 ## Requirements
 
-Node ≥ 22, pnpm ≥ 9. First studio install runs `pnpm exec playwright install chromium` (cached
-machine-wide). Remotion downloads its own headless browser on the first render.
+- Node.js `>=22`
+- pnpm `>=9`
+- Git
+- Chromium installed through Playwright for screenshot/UI verification:
 
-## Repo layout
+```bash
+pnpm exec playwright install chromium
+```
 
-| Path                | What                                                    |
-| ------------------- | ------------------------------------------------------- |
-| `SKILL.md`          | Agent entrypoint — methodology, workflow, primitive API |
-| `references/`       | Deep dives: design tokens, patterns, motion, video      |
-| `templates/studio/` | The scaffold (complete, runnable Vite app)              |
-| `scripts/init.mjs`  | Copies the template into a consumer project             |
-| `docs/`             | Architecture decisions + append-only build log          |
+## Repo Layout
 
-## Working on the skill itself
+| Path                    | Purpose                                                             |
+| ----------------------- | ------------------------------------------------------------------- |
+| `SKILL.md`              | Agent-facing workflow and quality rules                             |
+| `INSTALL.md`            | Shareable install and setup guide                                   |
+| `references/`           | Diagram patterns, design language, motion recipes, Remotion details |
+| `templates/studio/`     | Copyable Vite + React + Tailwind + Motion + Remotion studio         |
+| `scripts/init.mjs`      | Scaffolds the studio into a consumer project                        |
+| `docs/example-shot.png` | Reference output generated by the screenshot loop                   |
 
-`pnpm install` once (husky hooks), then `pnpm validate` before pushing. Conventional commits with
-scopes (`commitlint.config.mjs`); every source file carries an ABOUTME header; the build log
-protocol is in `docs/build-log/README.md`. Template changes must be re-verified:
-`cd templates/studio && pnpm typecheck && pnpm shoot --all` — then look at the PNGs.
+## Working On This Skill
+
+Install repo dependencies once:
+
+```bash
+pnpm install
+```
+
+Validate before pushing:
+
+```bash
+pnpm validate
+```
+
+Template changes should also be verified from inside `templates/studio/`:
+
+```bash
+pnpm typecheck
+pnpm check:scene-ui how-explanimate-works
+pnpm shoot --all
+pnpm build
+```
+
+Use Conventional Commits with one of the configured scopes:
+`repo`, `skill`, `references`, `template`, `scripts`, `docs`, `tooling`, or `release`.
