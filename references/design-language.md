@@ -4,8 +4,10 @@
 # Design Language
 
 Colors encode **meaning**, not decoration. Every visual choice in a scene pulls from these tokens —
-in JSX via Tailwind utilities (`bg-node-process`, `text-ink`) or via `theme.*` for SVG attributes.
-**Never hardcode hex values in scenes.** To rebrand every diagram, edit `theme.ts` + `styles.css`.
+neutrals/evidence as Tailwind utilities (`text-ink`, `bg-canvas`, `text-evidence-dim`), node-kind
+triples via `nodeColors[kind]` and the accent via `theme.accent` (imported from
+`src/shared/primitives`) for SVG attributes and inline styles. **Never hardcode hex values in
+scenes.** To rebrand every diagram, edit `theme.ts` + `styles.css` together.
 
 ## Neutrals
 

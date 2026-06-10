@@ -160,14 +160,14 @@ MP4 path. Send the user the PNG/MP4 when that is the deliverable.
 All primitives accept `className` and live in `src/shared/primitives/`. Colors come from semantic
 tokens — never hardcode hex in scenes. → Palette + typography: `references/design-language.md`
 
-| Primitive | Key props                                                                                                      | Notes                                                  |
-| --------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| `Stage`   | `w=1280 h=720 grid title`                                                                                      | Fixed coordinate space, scales to fit. One per scene.  |
-| `Node`    | `x y w h kind title sub` · `kind: start\|end\|process\|decision\|data\|evidence\|plain` · `enter delay appear` | `evidence` = dark code card (children = lines).        |
-| `Edge`    | `from to via curve: auto\|ortho\|line` · `label dashed width color arrow` · `enter="draw" delay draw`          | SVG connector with arrowhead; `draw` ∈ 0..1 for video. |
-| `Label`   | `x y level: title\|section\|body\|caption` · `align maxW color`                                                | Free-floating typography — the default for text.       |
-| `Dot`     | `x y r color`                                                                                                  | Timeline markers, anchors.                             |
-| `Reveal`  | `delay y appear`                                                                                               | Motion wrapper for freeform content blocks.            |
+| Primitive | Key props                                                                                                              | Notes                                                                                           |
+| --------- | ---------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `Stage`   | `w=1280 h=720 grid scale`                                                                                              | Fixed coordinate space, auto-fits viewport. One per scene. `scale` is required in compositions. |
+| `Node`    | `x y w h kind title sub` · `kind: start\|end\|process\|decision\|data\|danger\|evidence\|plain` · `enter delay appear` | `evidence` = dark code card (children = lines). `h` is a min-height.                            |
+| `Edge`    | `from to via curve: auto\|ortho\|line` · `label dashed width color arrow` · `enter="draw" delay draw`                  | SVG connector with arrowhead; `draw` ∈ 0..1 for video. `ortho` elbows along the dominant axis.  |
+| `Label`   | `x y level: title\|section\|body\|caption` · `align maxW color delay appear`                                           | Free-floating typography — the default for text.                                                |
+| `Dot`     | `x y r color delay appear`                                                                                             | Timeline markers, anchors.                                                                      |
+| `Reveal`  | `delay y appear`                                                                                                       | Motion wrapper for freeform content blocks.                                                     |
 
 **Driver contract:** `enter`/`delay` = Motion entrance (interactive; auto-completes in shot mode).
 `appear`/`draw` ∈ 0..1 = explicit progress (video; overrides `enter` when set).
