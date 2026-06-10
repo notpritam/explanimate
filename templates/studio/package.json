@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "shoot": "node scripts/shoot.mjs",
+    "check:scene-ui": "node scripts/check-scene-ui.mjs",
     "video:studio": "remotion studio",
     "video:still": "remotion still",
     "video:render": "remotion render"

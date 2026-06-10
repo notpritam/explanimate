@@ -1,15 +1,18 @@
 ---
 name: explanimate
-description: Build animated, React-based visual explainers — diagrams, flows, and motion-graphics videos — as real code (React + SVG + Tailwind + Motion + Remotion). Use when the user wants to visualize, explain, animate, or make a video of a concept, system, architecture, or user/data flow.
+description: Build animated, React-based visual explainers — hybrid HTML/SVG UI-workflow diagrams, flows, and motion-graphics videos — as real code (React + Tailwind + Motion + SVG primitives + Remotion). Use when the user wants to visualize, explain, animate, or make a video of a concept, system, architecture, or user/data flow.
 ---
 
 # explanimate
 
-Explain by animating. You write **scenes** — React components built from SVG + Tailwind +
-primitives — that argue visually, move meaningfully, and (when asked) render to real MP4 video.
+Explain by animating. You write **scenes** — React components built from HTML/CSS, SVG primitives,
+Motion, Tailwind, and Remotion — that argue visually, move meaningfully, and (when asked) render to
+real MP4 video.
 
 **This is not a canvas format.** There is no serialized JSON, no drawing surface. A diagram here is
-code: composable, diffable, animatable. You design it the way you design software.
+code: composable, diffable, animatable. For UI, workflow, command, product, and app explainers,
+use HTML for text, controls, panels, and editable state; use SVG primitives/icons/connectors for
+diagram geometry and directional flow. Avoid canvas.
 
 You produce three kinds of artifact, in increasing cost:
 
@@ -71,6 +74,13 @@ side-by-side, multi-zoom…) — **each major concept gets a DIFFERENT pattern**
 grid. Sketch the eye's path through the scene. Plan which 2–4 moments animate.
 → Full pattern recipes: `references/diagram-patterns.md`
 
+For interactive scenes, design the primary explanation first. Annotation, comment, approval, or
+feedback loops are secondary controls; keep them collapsed or idle by default. A normal click on the
+scene must never create a comment unless the user explicitly armed a Comment or Highlight mode.
+The studio template already mounts `SceneAnnotationLayer` on scene pages for Replay, Feedback,
+Comment, Highlight, edit/remove, and "Send to agent" payload generation; extend it only when the
+scene needs a custom feedback contract.
+
 ### 3. Build the scene
 
 Create `src/scenes/<scene-id>/Scene.tsx` in the studio and register it in
@@ -110,6 +120,11 @@ Layout rules carried from v1: hierarchy through scale (hero ≈ 300×150, primar
 secondary ≈ 140×64); whitespace = importance; every relationship gets an Edge — position alone is
 not a relationship; default to **free-floating Labels** — box fewer than ~30% of text elements.
 
+For hybrid HTML/SVG scenes, mark the root with `data-html-surface`. Mark important non-overlapping
+regions with `data-ui-critical`. Use buttons, segmented controls, inputs, and panels as real HTML
+controls. Use SVG for icons, arrows, connector paths, and vector relationships when it improves the
+diagram. Do not put annotation capture over the scene unless an explicit tool mode is active.
+
 ### 4. Verify visually — MANDATORY loop
 
 You cannot judge a scene from code. After every meaningful change:
@@ -122,6 +137,18 @@ Then **Read the PNG**. Audit: does the structure match the design? Text clipped/
 Edges landing where they should? Spacing balanced? Fix → reshoot → repeat until you would show it
 without caveats (typically 2–4 iterations). `shot=1` mode renders animations at their **final
 state** automatically (primitives handle this; gate any custom loops on `useShotMode()`).
+
+For interactive scenes or scenes with HTML controls, also add or run a UI gate:
+
+```bash
+pnpm check:scene-ui <scene-id>
+```
+
+If the scene has custom interactions, write a scene-specific Playwright script that proves them:
+step controls advance, normal clicks do not trigger annotation mode, comments/highlights require an
+explicit arm action, edit/remove updates payload state, controls do not overlap critical content,
+and button text does not overflow. Do not ask the user to view/play the scene until this gate and a
+fresh screenshot pass.
 
 ### 5. Animate (interactive scenes)
 
@@ -184,7 +211,8 @@ uniform card grids?
 **Structure** — every relationship has an Edge? clear eye path? hierarchy through scale?
 <30% of text boxed?
 **Verification** — shot PNG actually Read and audited? no clipping/overlap/stray edges? video
-spot-checked via stills before full render?
+spot-checked via stills before full render? UI/interaction gate passed when applicable?
+Playwright-rendered proof image or live browser inspected?
 **Code** — ABOUTME headers on every file? semantic tokens only? scene registered? typecheck passes?
 
 ---

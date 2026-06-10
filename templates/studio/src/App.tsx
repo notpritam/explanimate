@@ -3,6 +3,7 @@
 
 import { useEffect, useState } from "react";
 import { Player } from "@remotion/player";
+import { SceneAnnotationLayer } from "./annotations/SceneAnnotationLayer";
 import { SCENES } from "./scenes/registry";
 import { VIDEOS } from "./remotion/videos";
 import { useShotMode } from "./shared/primitives";
@@ -91,6 +92,8 @@ function Gallery() {
 }
 
 function SceneView({ id }: { id: string }) {
+  const shot = useShotMode();
+  const [animationKey, setAnimationKey] = useState(0);
   const scene = SCENES.find((s) => s.id === id);
   if (!scene) {
     return (
@@ -101,7 +104,8 @@ function SceneView({ id }: { id: string }) {
   return (
     <div className="h-screen w-screen">
       <BackLink />
-      <Component />
+      <Component key={animationKey} />
+      {shot ? null : <SceneAnnotationLayer sceneId={id} onReplay={() => setAnimationKey((key) => key + 1)} />}
     </div>
   );
 }
